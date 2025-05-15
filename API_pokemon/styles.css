@@ -47,7 +47,7 @@ body {
         url('https://i.imgur.com/0Sz8rCM.gif') no-repeat center center;
     background-size: cover;
     opacity: 0.7;
-    animation: galaxyMove 10s linear infinite;
+    animation: galaxyMove 50s linear infinite;
 }
 
    /* Stars - centraliza os filtros */
@@ -267,52 +267,6 @@ footer {
 
 /* Filtros */
 
-.filter-container label {
-    font-weight: bold;
-    color: white;
-}
-
-#type-filter {
-    padding: 8px 12px;
-    border-radius: 20px;
-    border: none;
-    background-color: rgba(255, 255, 255, 0.9);
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#type-filter:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #e3350d;
-}
-
-.search_container input {
-    font-weight: bold;
-    color: white;
-}
-
-#type-filter {
-    padding: 8px 12px;
-    border-radius: 20px;
-    border: none;
-    background-color: rgba(255, 255, 255, 0.9);
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#type-filter:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #e3350d;
-}
-/* Estilos modernos para a caixa de busca */
-.search-container {
-    position: relative;
-    max-width: 400px;
-    margin: 1rem auto;
-}
-
 #search {
     width: 100%;
     padding: 12px 20px;
@@ -382,4 +336,285 @@ footer {
     font-weight: 600;
     color: white;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Container principal dos filtros */
+.filters-wrapper {
+    max-width: 500px;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Estilo para cada container de filtro individual */
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Ajuste para os labels */
+.filter-container label {
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    min-width: 120px; /* Mantém um alinhamento consistente */
+    text-align: right;
+}
+
+/* Estilo para os selects - mantendo consistência */
+#type-filter, #generation-filter {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border-radius: 30px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#type-filter:focus, #generation-filter:focus {
+    outline: none;
+    box-shadow: 0 4px 20px rgba(227, 53, 13, 0.3);
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 480px) {
+    .filter-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .filter-container label {
+        text-align: left;
+        min-width: auto;
+    }
+    
+    #type-filter, #generation-filter {
+        width: 100%;
+    }
+}
+
+/* Seção de Filtros Moderna */
+.filters-section {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.filter-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    min-width: 250px;
+}
+
+.filter-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(227, 53, 13, 0.3);
+    border-color: rgba(227, 53, 13, 0.3);
+}
+
+.filter-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.filter-icon {
+    font-size: 1.2rem;
+}
+
+.modern-select {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    appearance: none;
+    background-image: 
+        linear-gradient(45deg, transparent 50%, #e3350d 50%),
+        linear-gradient(135deg, #e3350d 50%, transparent 50%);
+    background-position:
+        calc(100% - 20px) center,
+        calc(100% - 15px) center;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.modern-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(227, 53, 13, 0.3);
+    background-color: white;
+}
+
+/* Efeito de gradiente animado nos cards */
+.filter-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #e3350d, #f5c842, #e3350d);
+    background-size: 200% 100%;
+    border-radius: 16px 16px 0 0;
+    animation: gradientFlow 3s ease infinite;
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .filter-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .filter-card {
+        width: 100%;
+        min-width: auto;
+    }
+}
+/* Estilos da barra de pesquisa (MANTENHA ESSE BLOCO INTACTO) */
+.search-container {
+    position: relative;
+    max-width: 400px;
+    margin: 1rem auto;
+}
+
+#search {
+    width: 100%;
+    padding: 12px 20px;
+    padding-right: 45px;
+    border: none;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+    color: #333;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#search:focus {
+    outline: none;
+    box-shadow: 0 4px 20px rgba(227, 53, 13, 0.3);
+    background-color: white;
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+    cursor: pointer;
+}
+
+#search::placeholder {
+    color: #999;
+    font-weight: normal;
+}
+
+.search-container:hover #search {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Adicione ao final do seu CSS existente */
+
+/* Estilo melhorado para os selects */
+.modern-select {
+    background-image: 
+        linear-gradient(45deg, transparent 50%, #e3350d 50%),
+        linear-gradient(135deg, #e3350d 50%, transparent 50%) !important;
+    background-position:
+        calc(100% - 20px) center,
+        calc(100% - 15px) center !important;
+    background-size: 5px 5px, 5px 5px !important;
+    background-repeat: no-repeat !important;
+    padding-right: 35px !important;
+}
+
+/* Tooltip para gerações */
+.filter-card {
+    position: relative;
+}
+
+.filter-card:hover::after {
+    content: attr(data-generation);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+/* Badge de geração */
+.generation-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+/* Loader */
+.loader {
+    text-align: center;
+    color: white;
+    padding: 20px;
+    font-size: 1.2rem;
+}
+
+/* Select moderno */
+.modern-select {
+    background-image: 
+        linear-gradient(45deg, transparent 50%, #e3350d 50%),
+        linear-gradient(135deg, #e3350d 50%, transparent 50%) !important;
+    background-position:
+        calc(100% - 20px) center,
+        calc(100% - 15px) center !important;
+    background-size: 5px 5px, 5px 5px !important;
+    background-repeat: no-repeat !important;
+    padding-right: 35px !important;
+    cursor: pointer;
 }
