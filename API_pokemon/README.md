@@ -1,6 +1,6 @@
 # Pokédex - 1ª Geração
 
-![Pokédex Preview](https://via.placeholder.com/800x400/1B2735/FFFFFF?text=Pok%C3%A9dex+1%C2%AA+Gera%C3%A7%C3%A3o)
+![Pokédex Preview](https://github.com/kaua-hiro/API_Pokedex/issues/1#issue-3069681761)
 
 ## 📋 Descrição do Projeto
 
