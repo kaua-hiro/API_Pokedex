@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Não Encontrado | Pokedex</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos específicos para a página 404 */
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .error-code {
+            font-size: 6rem;
+            font-weight: 700;
+            color: #e3350d;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: white;
+            max-width: 600px;
+        }
+
+        .error-image {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 8px rgba(227, 53, 13, 0.5));
+        }
+
+        .home-button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #e3350d, #f5c842);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .home-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(227, 53, 13, 0.4);
+        }
+
+        .pikachu-sad {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 4rem;
+            }
+            .error-message {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Elementos de fundo (iguais ao index.html) -->
+    <div class="walppaper"></div>
+    <div class="galaxy"></div>
+    <div class="stars-layer"></div>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+
+    <!-- Conteúdo da página 404 -->
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" 
+             alt="Pikachu triste" 
+             class="error-image">
+        <div class="error-message">Oops! O Pokémon que você está procurando fugiu!</div>
+        <p style="color: #ccc; margin-bottom: 2rem; max-width: 500px;">
+            Parece que a página que você está tentando acessar não existe ou foi movida.
+            Volte para a Pokedex e continue sua jornada Pokémon!
+        </p>
+        <a href="/" class="home-button">Voltar para a Pokedex</a>
+    </div>
+
+    <!-- Pikachu triste no canto -->
+    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/25.gif" 
+         alt="Pikachu triste" 
+         class="pikachu-sad">
+
+    <!-- Rodapé consistente com o index.html -->
+    <footer style="position: fixed; bottom: 0; width: 100%;">
+        <p>© 2023 Pokedex - Todos os direitos reservados</p>
+    </footer>
+</body>
+</html>

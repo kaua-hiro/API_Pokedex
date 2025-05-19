@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Elementos de fundo -->
+    <div class="walppaper"></div>
+    <div class="galaxy"></div>
+    <div class="stars-layer"></div>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+
+    <!-- Conteúdo principal -->
+    <header>
+        <h1>Pokedex</h1>
+        <div class="search-container">
+            <input type="text" id="search" placeholder="Buscar Pokémon...">
+            <i class="search-icon">🔍</i>
+        </div>
+    </header>
+
+    <!-- Filtros -->
+    <div class="filters-section">
+        <div class="filter-group">
+            <div class="filter-card">
+                <label for="type-filter" class="filter-label">
+                    <i class="filter-icon">🌿</i>
+                    <span>Tipo</span>
+                </label>
+                <select id="type-filter" class="modern-select">
+                    <option value="">Todos os Tipos</option>
+                    <option value="grass">Grama</option>
+                    <option value="fire">Fogo</option>
+                    <option value="water">Água</option>
+                    <option value="bug">Inseto</option>
+                    <option value="normal">Normal</option>
+                    <option value="poison">Venenoso</option>
+                    <option value="electric">Elétrico</option>
+                    <option value="ground">Terra</option>
+                    <option value="fairy">Fada</option>
+                    <option value="fighting">Lutador</option>
+                    <option value="psychic">Psíquico</option>
+                    <option value="rock">Pedra</option>
+                    <option value="ghost">Fantasma</option>
+                    <option value="ice">Gelo</option>
+                    <option value="dragon">Dragão</option>
+                    <option value="dark">Sombrio</option>
+                    <option value="steel">Aço</option>
+                    <option value="flying">Voador</option>
+                </select>
+            </div>
+
+            <div class="filter-card">
+                <label for="generation-filter" class="filter-label">
+                    <i class="filter-icon">🌟</i>
+                    <span>Geração</span>
+                </label>
+                <select id="generation-filter" class="modern-select">
+                    <option value="1">1ª Geração (Kanto)</option>
+                    <option value="2">2ª Geração (Johto)</option>
+                    <option value="3">3ª Geração (Hoenn)</option>
+                    <option value="4">4ª Geração (Sinnoh)</option>
+                    <option value="5">5ª Geração (Unova)</option>
+                    <option value="6">6ª Geração (Kalos)</option>
+                    <option value="7">7ª Geração (Alola)</option>
+                    <option value="8">8ª Geração (Galar)</option>
+                    <option value="9">9ª Geração (Paldea)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pokedex -->
+    <main>
+        <div class="pokedex-container" id="pokedex"></div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>© 2023 Pokedex - Todos os direitos reservados</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
