@@ -618,3 +618,22 @@ footer {
     padding-right: 35px !important;
     cursor: pointer;
 }
+
+/* Adicione ao final do arquivo */
+.error-container {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.home-button {
+  transition: all 0.3s;
+}
+
+.home-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(227, 53, 13, 0.6);
+}
