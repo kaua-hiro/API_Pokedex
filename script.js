@@ -13,6 +13,28 @@ const GENERATIONS = {
 
 let currentPokemons = [];
 
+// Rotas válidas para redirecionamento
+const validRoutes = [
+    '/',
+    '/index.html',
+    '/404.html',
+    '/api_pokedex/',
+    '/api_pokedex/index.html'
+].map(path => path.toLowerCase());
+
+// Verificação de rotas inválidas
+(function checkInvalidRoutes() {
+    const currentPath = window.location.pathname.toLowerCase();
+    const isValidRoute = validRoutes.some(route => 
+        currentPath === route || 
+        currentPath.startsWith(route.replace(/\/$/, ''))
+    );
+    
+    if (!isValidRoute && !currentPath.includes('?')) {
+        window.location.href = './404.html';
+    }
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
     initFilters();
     loadPokemonsByGeneration('1');
@@ -109,6 +131,12 @@ function filterPokemons() {
             p.id.toString().includes(search)
         );
     }
+
+    // Redireciona para 404 se nenhum Pokémon for encontrado
+    if (filtered.length === 0 && !window.location.pathname.includes('404.html')) {
+        window.location.href = './404.html';
+        return;
+    }
     
     displayPokemons(filtered);
 }
@@ -130,50 +158,3 @@ function hideLoader() {
     const loader = document.querySelector('.loader');
     if (loader) loader.remove();
 }
-
-// ==============================================
-// 1. REDIRECIONAMENTO AUTOMÁTICO PARA 404
-// ==============================================
-const validRoutes = ['/', '/index.html', '/404.html'];
-
-if (!validRoutes.includes(window.location.pathname.toLowerCase())) {
-  window.location.href = './404.html';
-}
-
-// ==============================================
-// 2. MODIFICAÇÃO DA FUNÇÃO searchPokemon()
-// ==============================================
-function searchPokemon() {
-  // Seu código de busca existente (substitua pelas suas variáveis reais)
-  const searchInput = document.getElementById('search').value.toLowerCase();
-  const selectedType = document.getElementById('type-filter').value;
-  const selectedGeneration = document.getElementById('generation-filter').value;
-
-  let filteredPokemons = currentPokemons;
-
-  // Filtros existentes (mantenha seu código atual)
-  if (selectedType) {
-    filteredPokemons = filteredPokemons.filter(p => p.types.includes(selectedType));
-  }
-
-  if (searchInput) {
-    filteredPokemons = filteredPokemons.filter(p => 
-      p.name.toLowerCase().includes(searchInput) || 
-      p.id.toString().includes(searchInput)
-    );
-  }
-
-  // NOVO: Redireciona para 404 se nenhum Pokémon for encontrado
-  if (filteredPokemons.length === 0) {
-    window.location.href = './404.html';
-    return; // Interrompe a execução
-  }
-
-  // Seu código de exibição existente
-  displayPokemons(filteredPokemons);
-}
-
-// ==============================================
-// 3. INTEGRAÇÃO COM O RESTO DO CÓDIGO
-// ==============================================
-// Mantenha todas as outras funções existentes (filterPokemons, displayPok
