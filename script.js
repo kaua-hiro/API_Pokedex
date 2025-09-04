@@ -12,28 +12,7 @@ const GENERATIONS = {
 };
 
 let currentPokemons = [];
-
-// Rotas válidas para redirecionamento
-const validRoutes = [
-    '/',
-    '/index.html',
-    '/404.html',
-    '/api_pokedex/',
-    '/api_pokedex/index.html'
-].map(path => path.toLowerCase());
-
-// Verificação de rotas inválidas
-(function checkInvalidRoutes() {
-    const currentPath = window.location.pathname.toLowerCase();
-    const isValidRoute = validRoutes.some(route => 
-        currentPath === route || 
-        currentPath.startsWith(route.replace(/\/$/, ''))
-    );
-    
-    if (!isValidRoute && !currentPath.includes('?')) {
-        window.location.href = './404.html';
-    }
-})();
+const modalContainer = document.getElementById('modal-container');
 
 document.addEventListener('DOMContentLoaded', () => {
     initFilters();
@@ -42,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadPokemonsByGeneration(gen) {
     showLoader();
-    
     try {
         const { offset, limit } = GENERATIONS[gen];
         const url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
@@ -50,6 +28,7 @@ async function loadPokemonsByGeneration(gen) {
         updateHeaderTitle(gen);
     } catch (error) {
         console.error("Erro ao carregar Pokémon:", error);
+        displayError("Não foi possível carregar os Pokémon. Verifique sua conexão.");
     } finally {
         hideLoader();
     }
@@ -82,6 +61,11 @@ async function fetchPokemons(url) {
 function displayPokemons(pokemons) {
     const pokedex = document.getElementById('pokedex');
     pokedex.innerHTML = '';
+
+    if (pokemons.length === 0) {
+        displayError("Nenhum Pokémon encontrado com os filtros aplicados.");
+        return;
+    }
     
     pokemons.forEach(pokemon => {
         const card = document.createElement('div');
@@ -95,23 +79,18 @@ function displayPokemons(pokemons) {
             </div>
             <div class="generation-badge">${GENERATIONS[pokemon.generation]?.name || 'Kanto'}</div>
         `;
+        // Adiciona o evento de clique para abrir o modal de detalhes
+        card.addEventListener('click', () => showPokemonDetails(pokemon.id));
         pokedex.appendChild(card);
     });
 }
 
 function initFilters() {
-    // Filtro por geração
-    document.getElementById('generation-filter').addEventListener('change', async (e) => {
-        await loadPokemonsByGeneration(e.target.value);
+    document.getElementById('generation-filter').addEventListener('change', (e) => {
+        loadPokemonsByGeneration(e.target.value);
     });
-    
-    // Filtro por tipo
     document.getElementById('type-filter').addEventListener('change', filterPokemons);
-    
-    // Barra de pesquisa
     document.getElementById('search').addEventListener('input', filterPokemons);
-    
-    // Ícone de pesquisa
     document.querySelector('.search-icon').addEventListener('click', filterPokemons);
 }
 
@@ -131,15 +110,77 @@ function filterPokemons() {
             p.id.toString().includes(search)
         );
     }
-
-    // Redireciona para 404 se nenhum Pokémon for encontrado
-    if (filtered.length === 0 && !window.location.pathname.includes('404.html')) {
-        window.location.href = './404.html';
-        return;
-    }
     
     displayPokemons(filtered);
 }
+
+// --- NOVAS FUNÇÕES PARA O MODAL DE DETALHES ---
+
+async function showPokemonDetails(pokemonId) {
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+        const details = await response.json();
+        createDetailsModal(details);
+    } catch (error) {
+        console.error("Erro ao buscar detalhes do Pokémon:", error);
+    }
+}
+
+function createDetailsModal(details) {
+    modalContainer.innerHTML = ''; // Limpa modal anterior
+
+    const primaryType = details.types[0].type.name;
+
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content type-${primaryType}">
+            <span class="modal-close-button">&times;</span>
+            <div class="modal-header">
+                <h2 class="modal-pokemon-name">${details.name}</h2>
+                <span class="modal-pokemon-number">#${details.id.toString().padStart(3, '0')}</span>
+            </div>
+            <div class="modal-body">
+                <img class="modal-pokemon-image" src="${details.sprites.other['official-artwork']?.front_default || details.sprites.front_default}" alt="${details.name}">
+                <div class="modal-pokemon-info">
+                    <div class="modal-pokemon-types">
+                        ${details.types.map(t => `<span class="type ${t.type.name}">${t.type.name}</span>`).join('')}
+                    </div>
+                    <div class="pokemon-stats">
+                        ${details.stats.map(s => `
+                            <div class="stat-row">
+                                <span class="stat-name">${s.stat.name.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</span>
+                                <div class="stat-bar-container">
+                                    <div class="stat-bar" style="width: ${Math.min(s.base_stat, 150)}px;">${s.base_stat}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    modalContainer.appendChild(modal);
+    modalContainer.classList.add('visible');
+
+    // Eventos para fechar o modal
+    modal.querySelector('.modal-close-button').addEventListener('click', closeModal);
+    modalContainer.addEventListener('click', (e) => {
+        if (e.target === modalContainer) {
+            closeModal();
+        }
+    });
+}
+
+function closeModal() {
+    modalContainer.classList.remove('visible');
+    setTimeout(() => {
+        modalContainer.innerHTML = '';
+    }, 300); // Aguarda a animação de fade-out
+}
+
+// --- FUNÇÕES UTILITÁRIAS ---
 
 function getGenerationByID(id) {
     for (const [gen, config] of Object.entries(GENERATIONS)) {
@@ -157,4 +198,8 @@ function showLoader() {
 function hideLoader() {
     const loader = document.querySelector('.loader');
     if (loader) loader.remove();
+}
+
+function displayError(message) {
+     document.getElementById('pokedex').innerHTML = `<div class="error-message-inline">${message}</div>`;
 }
