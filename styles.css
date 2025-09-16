@@ -26,16 +26,7 @@ body {
     position: relative;
     min-height: 100vh;
 }
-/* função para ficar movendo com ose fosse da galaxia */
-/* @keyframes galaxyMove {
-    0% {
-        background-position: 0% 0%;
-    }
-    100% {
-        background-position: 100% 100%;
-    }
-} */
-    /* fundo da galaxia */
+
 .galaxy {
     position: fixed;
     top: 0;
@@ -49,8 +40,6 @@ body {
     opacity: 0.7;
     animation: galaxyMove 50s linear infinite;
 }
-
-   /* Stars - centraliza os filtros */
 
 .stars::after {
     opacity: 0.5;
@@ -79,7 +68,6 @@ header {
 }
 
 
-/* Container Principal */
 main {
     padding: 2rem;
     max-width: 1400px;
@@ -93,7 +81,6 @@ main {
     padding: 10px;
 }
 
-/* Cards de Pokémon */
 .pokemon-card {
     background: white;
     border-radius: 12px;
@@ -149,7 +136,6 @@ main {
     letter-spacing: 0.5px;
 }
 
-/* Footer */
 footer {
     text-align: center;
     padding: 1.5rem;
@@ -158,7 +144,6 @@ footer {
     margin-top: 2rem;
 }
 
-/* Cores dos Tipos */
 .normal { background-color: #A8A878; }
 .fighting { background-color: #C03028; }
 .flying { background-color: #A890F0; }
@@ -178,7 +163,6 @@ footer {
 .dark { background-color: #705848; }
 .fairy { background-color: #EE99AC; }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .pokedex-container {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -214,7 +198,7 @@ footer {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
 }
 
@@ -876,4 +860,42 @@ footer {
         font-size: 0.8rem;
         padding-right: 5px;
     }
+}
+/* === ESTILOS PARA O BOTÃO DE FAVORITO (ADICIONE AO FINAL DO ARQUIVO) === */
+
+.favorite-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+    color: #e0e0e0; /* Cor padrão do coração (não favoritado) */
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.favorite-button:hover {
+    transform: scale(1.2);
+}
+
+.favorite-button.favorited {
+    color: #e3350d; /* Cor do coração quando favoritado */
+    transform: scale(1.1);
+}
+
+/* Garante que o botão não sobreponha o número do Pokémon no card */
+.pokemon-card .pokemon-number {
+    margin-top: 25px; /* Adiciona espaço no topo para o coração */
+}
+
+/* Ajuste de posição para o botão no modal */
+.modal-content .favorite-button {
+    top: 15px;
+    right: 55px; /* Ao lado do botão de fechar */
+    font-size: 2rem;
+    color: #aaa; /* Cor um pouco mais escura para o modal */
+}
+
+.modal-content .favorite-button.favorited {
+    color: #e3350d;
 }
