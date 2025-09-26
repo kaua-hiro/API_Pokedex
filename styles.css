@@ -1,3 +1,25 @@
+:root {
+    --body-bg: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    --text-color: #fff;
+    --card-bg: white;
+    --card-text-color: #222;
+    --card-number-color: #777;
+    --header-footer-bg: linear-gradient(135deg, #333, #111);
+    --filter-card-bg: rgba(255, 255, 255, 0.1);
+    --filter-card-border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] {
+    --body-bg: #F0F2F5;
+    --text-color: #1c1e21;
+    --card-bg: #FFFFFF;
+    --card-text-color: #1c1e21;
+    --card-number-color: #65676b;
+    --header-footer-bg: linear-gradient(135deg, #e9ebee, #f0f2f5);
+    --filter-card-bg: rgba(255, 255, 255, 0.8);
+    --filter-card-border: 1px solid #ddd;
+}
+
 header, main, footer {
     position: relative;
     z-index: 1;
@@ -19,6 +41,8 @@ body {
     background: 
         radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%),
         url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center;
+        background: var(--body-bg);
+        color: var(--text-color);
     background-size: cover;
     color: #fff;
     line-height: 1.6;
@@ -89,6 +113,7 @@ main {
     transition: all 0.3s ease;
     text-align: center;
     border: 1px solid #e0e0e0;
+    background: var(--card-bg);
 }
 
 .pokemon-card:hover {
@@ -116,6 +141,7 @@ main {
     margin: 0.5rem 0;
     color: #222;
     text-transform: capitalize;
+    color: var(--card-text-color);
 }
 
 .pokemon-types {
@@ -142,6 +168,8 @@ footer {
     background: linear-gradient(135deg, #333, #111);
     color: white;
     margin-top: 2rem;
+    background: var(--header-footer-bg);
+    color: var(--text-color);
 }
 
 .normal { background-color: #A8A878; }
@@ -406,6 +434,8 @@ footer {
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
     min-width: 250px;
+    background: var(--filter-card-bg);
+    border: var(--filter-card-border);
 }
 
 .filter-card:hover {
@@ -879,23 +909,41 @@ footer {
 }
 
 .favorite-button.favorited {
-    color: #e3350d; /* Cor do coração quando favoritado */
+    color: #e3350d; 
     transform: scale(1.1);
 }
 
-/* Garante que o botão não sobreponha o número do Pokémon no card */
 .pokemon-card .pokemon-number {
-    margin-top: 25px; /* Adiciona espaço no topo para o coração */
+    margin-top: 25px;
+    color: var(--card-number-color);
 }
 
-/* Ajuste de posição para o botão no modal */
 .modal-content .favorite-button {
     top: 15px;
-    right: 55px; /* Ao lado do botão de fechar */
+    right: 55px; 
     font-size: 2rem;
-    color: #aaa; /* Cor um pouco mais escura para o modal */
+    color: #aaa; 
 }
 
 .modal-content .favorite-button.favorited {
     color: #e3350d;
+}
+
+.theme-toggle-button {
+    background: var(--filter-card-bg);
+    color: var(--text-color);
+    border: var(--filter-card-border);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.theme-toggle-button:hover {
+    transform: scale(1.1) rotate(15deg);
 }

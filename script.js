@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         9: { name: "Paldea", limit: 110, offset: 905 }
     };
 
-    let allPokemons = []; // Agora guarda a lista base (ou da geração ou do tipo)
+    let allPokemons = []; 
     const POKEMONS_PER_PAGE = 24;
     let currentOffset = 0;
     let isLoading = false;
@@ -22,8 +22,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const typeFilter = document.getElementById('type-filter');
     const searchInput = document.getElementById('search');
     const scrollTrigger = document.getElementById('scroll-trigger');
+    const themeToggleButton = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme') || 'dark';
 
-    // --- LÓGICA DE FETCH ---
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    if (currentTheme === 'light') {
+        themeToggleButton.innerHTML = '🌙';
+    } else {
+        themeToggleButton.innerHTML = '☀️';
+    }
+
+    themeToggleButton.addEventListener('click', () => {
+        let newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+
+        if (newTheme === 'light') {
+            themeToggleButton.innerHTML = '🌙';
+        } else {
+            themeToggleButton.innerHTML = '☀️';
+        }
+    });
 
     async function handleFilterChange() {
         const selectedGen = generationFilter.value;
@@ -34,10 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
         allPokemons = [];
 
         if (selectedType) {
-            // Se um tipo for selecionado, ele tem prioridade
             await fetchPokemonsByType(selectedType, selectedGen);
         } else {
-            // Caso contrário, carrega a geração inteira
             await fetchAllPokemonsByGeneration(selectedGen);
         }
     }
