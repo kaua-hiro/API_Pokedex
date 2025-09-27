@@ -613,6 +613,7 @@ footer {
 
 /* Loader */
 .loader {
+    grid-column: 1 / -1;
     text-align: center;
     color: white;
     padding: 20px;
@@ -946,70 +947,4 @@ footer {
 
 .theme-toggle-button:hover {
     transform: scale(1.1) rotate(15deg);
-}
-/* Estilos para o Skeleton Loading (Adicione ao final) */
-
-.skeleton-card {
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--filter-card-border);
-}
-
-.skeleton {
-    opacity: 0.7;
-    animation: skeleton-loading-light 1s linear infinite alternate;
-}
-
-.skeleton-image {
-    width: 120px;
-    height: 120px;
-    background-color: #e0e0e0;
-    border-radius: 50%;
-    margin: 0 auto 0.5rem auto;
-}
-
-.skeleton-text {
-    width: 70%;
-    height: 20px;
-    background-color: #e0e0e0;
-    border-radius: 4px;
-    margin: 0.8rem auto;
-}
-
-.skeleton-text-small {
-    width: 40%;
-    height: 16px;
-}
-
-/* Animação para o tema CLARO */
-@keyframes skeleton-loading-light {
-    0% {
-        background-color: hsl(200, 20%, 80%);
-    }
-    100% {
-        background-color: hsl(200, 20%, 95%);
-    }
-}
-
-/* Animação para o tema ESCURO */
-@keyframes skeleton-loading-dark {
-    0% {
-        background-color: hsl(200, 2%, 25%);
-    }
-    100% {
-        background-color: hsl(200, 2%, 40%);
-    }
-}
-
-/* Aplica a animação correta para o tema escuro */
-[data-theme="dark"] .skeleton {
-    animation-name: skeleton-loading-dark;
-}
-
-/* Ajuste de cor de fundo para o tema escuro */
-[data-theme="dark"] .skeleton-image,
-[data-theme="dark"] .skeleton-text {
-    background-color: #444;
 }
