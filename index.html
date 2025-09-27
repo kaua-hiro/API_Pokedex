@@ -26,6 +26,25 @@
     <div class="filters-section">
         <div class="filter-group">
             <div class="filter-card">
+                <label for="generation-filter" class="filter-label">
+                    <i class="filter-icon">🌟</i>
+                    <span>Geração</span>
+                </label>
+                <select id="generation-filter" class="modern-select">
+                    <option value="all">Todas as Gerações</option>
+                    <option value="1">1ª Geração (Kanto)</option>
+                    <option value="2">2ª Geração (Johto)</option>
+                    <option value="3">3ª Geração (Hoenn)</option>
+                    <option value="4">4ª Geração (Sinnoh)</option>
+                    <option value="5">5ª Geração (Unova)</option>
+                    <option value="6">6ª Geração (Kalos)</option>
+                    <option value="7">7ª Geração (Alola)</option>
+                    <option value="8">8ª Geração (Galar)</option>
+                    <option value="9">9ª Geração (Paldea)</option>
+                </select>
+            </div>
+            
+            <div class="filter-card">
                 <label for="type-filter" class="filter-label">
                     <i class="filter-icon">🌿</i>
                     <span>Tipo</span>
@@ -52,30 +71,11 @@
                     <option value="flying">Voador</option>
                 </select>
             </div>
-
-            <div class="filter-card">
-                <label for="generation-filter" class="filter-label">
-                    <i class="filter-icon">🌟</i>
-                    <span>Geração</span>
-                </label>
-                <select id="generation-filter" class="modern-select">
-                    <option value="1">1ª Geração (Kanto)</option>
-                    <option value="2">2ª Geração (Johto)</option>
-                    <option value="3">3ª Geração (Hoenn)</option>
-                    <option value="4">4ª Geração (Sinnoh)</option>
-                    <option value="5">5ª Geração (Unova)</option>
-                    <option value="6">6ª Geração (Kalos)</option>
-                    <option value="7">7ª Geração (Alola)</option>
-                    <option value="8">8ª Geração (Galar)</option>
-                    <option value="9">9ª Geração (Paldea)</option>
-                </select>
-            </div>
         </div>
     </div>
 
     <main>
         <div class="pokedex-container" id="pokedex"></div>
-        <div id="scroll-trigger" style="height: 50px;"></div>
         <div id="modal-container"></div> 
     </main>
 
