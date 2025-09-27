@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search');
     const themeToggleButton = document.getElementById('theme-toggle');
 
-    // --- 3. FUNÇÕES AUXILIARES (MOVİDAS PARA O TOPO PARA CORRIGIR O ERRO) ---
+    // --- 3. FUNÇÕES AUXILIARES ---
     const setFiltersDisabled = (disabled) => {
         searchInput.disabled = disabled;
         typeFilter.disabled = disabled;
@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 4. LÓGICA PRINCIPAL ---
 
-    // Carrega os primeiros 24 Pokémon para uma visualização inicial rápida
     async function loadInitialPokemon() {
         showLoader("Carregando Pokémon...");
         try {
@@ -70,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Carrega a lista completa de nomes em segundo plano para a busca
     async function loadMasterListInBackground() {
         try {
             const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1302');
@@ -86,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Busca dados de um tipo específico e armazena em cache
     async function fetchAndCacheTypeData(typeName) {
         if (typeCache[typeName]) return typeCache[typeName];
         const response = await fetch(`https://pokeapi.co/api/v2/type/${typeName}`);
@@ -96,53 +93,67 @@ document.addEventListener('DOMContentLoaded', () => {
         return pokemonNames;
     }
 
-    // Função central que lida com a busca e filtragem
     async function handleSearchAndFilter() {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        const selectedGen = generationFilter.value;
-        const selectedType = typeFilter.value;
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    const selectedGen = generationFilter.value;
+    const selectedType = typeFilter.value;
 
-        // Se não há filtros ou busca, e a página já carregou, não faz nada.
-        if (!searchTerm && selectedGen === 'all' && !selectedType) {
-            // Poderia recarregar os iniciais, mas vamos deixar como está por enquanto.
-            return;
-        }
+    // Linhas de Debug: Você pode ver isso no Console do navegador (F12)
+    console.log('--- Iniciando Busca/Filtro ---');
+    console.log('Termo de Busca:', searchTerm);
+    console.log('Geração Selecionada:', selectedGen);
+    console.log('Tipo Selecionado:', selectedType);
 
-        if (!isMasterListLoaded) {
-            showLoader("Aguarde, preparando a busca...");
-            return;
-        }
-
-        let filteredResults = masterPokemonList;
-
-        if (searchTerm) {
-            filteredResults = filteredResults.filter(p => p.name.includes(searchTerm));
-        }
-        if (selectedGen !== 'all') {
-            filteredResults = filteredResults.filter(p => getGenerationByID(p.id) === selectedGen);
-        }
-        if (selectedType) {
-            showLoader(`Filtrando por tipo ${selectedType}...`);
-            const typePokemonNames = await fetchAndCacheTypeData(selectedType);
-            filteredResults = filteredResults.filter(p => typePokemonNames.has(p.name));
-        }
-
-        if (filteredResults.length === 0) {
-            displayError("Nenhum Pokémon corresponde aos filtros.");
-            return;
-        }
-
-        const resultsToDisplay = filteredResults.slice(0, 24);
-        showLoader("Carregando resultados...");
-
-        try {
-            const detailPromises = resultsToDisplay.map(p => fetch(p.url).then(res => res.json()));
-            const pokemonDetails = await Promise.all(detailPromises);
-            renderCards(pokemonDetails);
-        } catch (error) {
-            displayError("Ocorreu um erro ao carregar os Pokémon.");
-        }
+    if (!isMasterListLoaded) {
+        showLoader("Aguarde, preparando a busca...");
+        return;
     }
+
+    let filteredResults = masterPokemonList;
+
+    if (searchTerm) {
+        filteredResults = filteredResults.filter(p => p.name.includes(searchTerm));
+    }
+    if (selectedGen !== 'all') {
+        filteredResults = filteredResults.filter(p => getGenerationByID(p.id) === selectedGen);
+    }
+    if (selectedType) {
+        showLoader(`Filtrando por tipo ${selectedType}...`);
+        const typePokemonNames = await fetchAndCacheTypeData(selectedType);
+        filteredResults = filteredResults.filter(p => typePokemonNames.has(p.name));
+    }
+
+    if (filteredResults.length === 0) {
+        displayError("Nenhum Pokémon corresponde aos filtros.");
+        return;
+    }
+    
+    let resultsToDisplay;
+
+    // Condição explícita para mostrar TODOS os resultados
+    const shouldShowAll = !searchTerm && (selectedGen !== 'all' || selectedType);
+
+    if (shouldShowAll) {
+        // Mostra TODOS se um filtro específico de Geração ou Tipo for selecionado (e não há busca por texto)
+        resultsToDisplay = filteredResults;
+        console.log(`Exibindo TODOS os ${resultsToDisplay.length} resultados do filtro.`);
+    } else {
+        // Limita a 24 nos outros casos (busca por texto ou tela sem filtros específicos)
+        resultsToDisplay = filteredResults.slice(0, 24);
+        console.log(`Exibindo os primeiros ${resultsToDisplay.length} de ${filteredResults.length} resultados.`);
+    }
+    
+    showLoader("Carregando resultados...");
+
+    try {
+        const detailPromises = resultsToDisplay.map(p => fetch(p.url).then(res => res.json()));
+        const pokemonDetails = await Promise.all(detailPromises);
+        renderCards(pokemonDetails);
+    } catch (error) {
+        displayError("Ocorreu um erro ao carregar os Pokémon.");
+        console.error("Erro ao buscar detalhes:", error);
+    }
+}
 
     // --- 5. RENDERIZAÇÃO ---
     function renderCards(pokemonArray) {
