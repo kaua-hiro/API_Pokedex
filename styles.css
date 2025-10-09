@@ -1,4 +1,32 @@
 :root {
+    --body-bg-color: #F0F2F5;
+    --text-color: #1c1e21;
+    --card-bg-color: #FFFFFF;
+    --card-text-color: #1c1e21;
+    --card-number-color: #65676b;
+    --filter-card-bg: rgba(255, 255, 255, 0.8);
+    --filter-card-border: 1px solid #ddd;
+}
+
+body.dark-mode {
+    --body-bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg-color: #1e1e1e;
+    --card-text-color: #e0e0e0;
+    --card-number-color: #888;
+    --filter-card-bg: rgba(30, 30, 30, 0.8);
+    --filter-card-border: 1px solid #333;
+}
+
+body, .pokemon-card, .pokemon-name, .pokemon-number, .filter-card, .theme-toggle-button {
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+footer {
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+:root {
     --body-bg: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
     --text-color: #fff;
     --card-bg: white;
@@ -41,7 +69,7 @@ body {
     background: 
         radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%),
         url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center;
-        background: var(--body-bg);
+        background-color: var(--body-bg-color);
         color: var(--text-color);
     background-size: cover;
     color: #fff;
@@ -113,7 +141,7 @@ main {
     transition: all 0.3s ease;
     text-align: center;
     border: 1px solid #e0e0e0;
-    background: var(--card-bg);
+    background: var(--card-bg-color);
 }
 
 .pokemon-card:hover {
@@ -133,6 +161,7 @@ main {
     color: #777;
     font-size: 0.9rem;
     font-weight: 600;
+    color: var(--card-number-color);
 }
 
 .pokemon-name {
@@ -939,10 +968,77 @@ footer {
     height: 45px;
     font-size: 1.5rem;
     cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease, color 0.4s ease;
     transition: transform 0.2s ease, background-color 0.3s ease;
     position: absolute;
     top: 20px;
     right: 20px;
+}
+
+.theme-toggle-button:hover {
+    transform: scale(1.1) rotate(15deg);
+}
+
+.background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: opacity 0.8s ease-in-out;
+    z-index: -2;
+}
+
+.walppaper {
+    background-image: url('https://i.imgur.com/0Sz8rCM.gif');
+    opacity: 1;
+}
+
+.dark-bg {
+    opacity: 0;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://media1.tenor.com/m/2KNLkCsewREAAAAC/giratina-distortion.gif');
+}
+
+body.dark-mode .walppaper {
+    opacity: 0;
+}
+
+body.dark-mode .galaxy {
+    opacity: 0; 
+}
+
+body.dark-mode .dark-bg {
+    opacity: 1;
+}
+
+body.dark-mode .theme-toggle-button {
+    transform: rotate(360deg);
+}
+
+.stars, .stars2, .stars3 {
+    z-index: -1;
+}
+
+.theme-toggle-button {
+    background: var(--filter-card-bg);
+    color: var(--text-color);
+    border: var(--filter-card-border);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease, color 0.4s ease;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .theme-toggle-button:hover {

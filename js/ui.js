@@ -1,4 +1,4 @@
-import { GENERATIONS } from './constants.js'; // Importa as constantes
+import { GENERATIONS } from './constants.js';
 import { getGenerationByID } from './api.js';
 
 export function createPokemonCard(pokemon) { const card = document.createElement('div'); card.className = 'pokemon-card'; card.innerHTML = ` <img src="${pokemon.image}" alt="${pokemon.name}" loading="lazy"> <div class="pokemon-number">#${String(pokemon.id).padStart(3, '0')}</div> <div class="pokemon-name">${pokemon.name}</div> <div class="pokemon-types"> ${pokemon.types.map(type => `<span class="type ${type}">${type}</span>`).join('')} </div> <div class="generation-badge">${GENERATIONS[getGenerationByID(pokemon.id)]?.name || 'Kanto'}</div> `; return card; }
@@ -7,4 +7,24 @@ export function closeModal(modalContainer) { modalContainer.classList.remove('vi
 export function showLoader(pokedexContainer) { pokedexContainer.innerHTML = ''; const skeletonCount = 12; for (let i = 0; i < skeletonCount; i++) { const card = document.createElement('div'); card.className = 'skeleton-card'; card.innerHTML = `<div class="skeleton skeleton-image"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text skeleton-text-small"></div>`; pokedexContainer.appendChild(card); } }
 export function displayError(message, pokedexContainer) { pokedexContainer.innerHTML = `<div class="error-message-inline">${message}</div>`; }
 export function updateHeaderTitle(gen) { document.querySelector('header h1').textContent = `Pokedex - ${GENERATIONS[gen]?.name || 'Todas'}`; }
-export function setupTheme(themeToggleButton) { const currentTheme = localStorage.getItem('theme') || 'dark'; document.documentElement.setAttribute('data-theme', currentTheme); themeToggleButton.innerHTML = currentTheme === 'light' ? '🌙' : '☀️'; themeToggleButton.addEventListener('click', () => { let newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', newTheme); localStorage.setItem('theme', newTheme); themeToggleButton.innerHTML = newTheme === 'light' ? '🌙' : '☀️'; }); }
+export function setupTheme(themeToggleButton) {
+    const applyTheme = (theme) => {
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggleButton.innerHTML = '🌙';
+        } else {
+            document.body.classList.remove('dark-mode');
+            themeToggleButton.innerHTML = '☀️';
+        }
+    };
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    applyTheme(savedTheme);
+
+    themeToggleButton.addEventListener('click', () => {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        const newTheme = isDarkMode ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+    });
+}
