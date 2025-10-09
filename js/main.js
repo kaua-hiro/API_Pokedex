@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Enter') { e.preventDefault(); triggerGlobalSearch(); }
         });
 
-        generationFilter.value = '1';
+        generationFilter.value = 'all';
         updateHeaderTitle(generationFilter.value);
         handleFilterOrBrowse(); 
         observer.observe(scrollTrigger);
