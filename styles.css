@@ -1,3 +1,15 @@
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 :root {
     --body-bg-color: #F0F2F5;
     --text-color: #1c1e21;
@@ -134,7 +146,7 @@ main {
 }
 
 .pokemon-card {
-    background: white;
+    position: relative;
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -142,11 +154,18 @@ main {
     text-align: center;
     border: 1px solid #e0e0e0;
     background: var(--card-bg-color);
+    cursor: pointer;
 }
 
-.pokemon-card:hover {
+.pokemon-card:hover,
+.pokemon-card:focus-visible {
     transform: translateY(-8px);
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.pokemon-card:focus-visible {
+    outline: 3px solid #e3350d;
+    outline-offset: 2px;
 }
 
 .pokemon-card img {
@@ -830,16 +849,33 @@ footer {
     height: 100%;
     background: linear-gradient(90deg, #64b5f6, #2196f3); /* Um azul mais vibrante */
     border-radius: 20px;
-    color: white;
-    font-size: 0.9rem; /* Levemente maior */
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 8px;
-    min-width: 25px; /* Garante que o valor apareça mesmo com barra pequena */
     transition: width 0.5s ease-out; /* Adiciona transição para a barra */
     box-shadow: 0 1px 2px rgba(0,0,0,0.2); /* Sombra na barra */
+}
+
+.stat-value {
+    color: var(--card-text-color);
+    font-weight: bold;
+    font-size: 0.9rem;
+    width: 32px;
+    text-align: left;
+    flex-shrink: 0;
+}
+
+.modal-pokemon-meta {
+    display: flex;
+    gap: 1.5rem;
+    color: var(--card-text-color);
+    margin-bottom: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.modal-pokemon-abilities {
+    color: var(--card-text-color);
+    margin-bottom: 1.2rem;
+    text-align: center;
+    text-transform: capitalize;
 }
 
 /* Cores das barras podem variar por tipo primário, ou ser fixas para simplicidade */
@@ -860,6 +896,75 @@ footer {
     color: #ffc107;
     font-size: 1.5rem;
     padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.retry-button {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 30px;
+    background: #e3350d;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.retry-button:hover,
+.retry-button:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(227, 53, 13, 0.4);
+}
+
+/* Skeleton loading */
+.skeleton-card {
+    background: var(--card-bg-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, rgba(150, 150, 150, 0.15) 25%, rgba(150, 150, 150, 0.3) 37%, rgba(150, 150, 150, 0.15) 63%);
+    background-size: 400% 100%;
+    border-radius: 8px;
+    animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+.skeleton-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+
+.skeleton-text {
+    width: 80%;
+    height: 1rem;
+}
+
+.skeleton-text-small {
+    width: 50%;
+    height: 0.8rem;
+}
+
+@keyframes skeleton-shimmer {
+    0% { background-position: 100% 50%; }
+    100% { background-position: 0 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skeleton, .pokemon-card, .retry-button {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
 }
 
 /* Cores de fundo do modal baseadas no tipo primário */

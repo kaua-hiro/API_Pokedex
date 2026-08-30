@@ -1,24 +1,209 @@
 import { GENERATIONS } from './constants.js';
 import { getGenerationByID } from './api.js';
 
-export function createPokemonCard(pokemon) { const card = document.createElement('div'); card.className = 'pokemon-card'; card.innerHTML = ` <img src="${pokemon.image}" alt="${pokemon.name}" loading="lazy"> <div class="pokemon-number">#${String(pokemon.id).padStart(3, '0')}</div> <div class="pokemon-name">${pokemon.name}</div> <div class="pokemon-types"> ${pokemon.types.map(type => `<span class="type ${type}">${type}</span>`).join('')} </div> <div class="generation-badge">${GENERATIONS[getGenerationByID(pokemon.id)]?.name || 'Kanto'}</div> `; return card; }
-export function createDetailsModal(details, modalContainer) { const primaryType = details.types[0].type.name; modalContainer.innerHTML = `<div class="modal"><div class="modal-content type-${primaryType}"></div></div>`; const modalContent = modalContainer.querySelector('.modal-content'); modalContent.innerHTML = `<span class="modal-close-button">&times;</span><div class="modal-header"><h2 class="modal-pokemon-name">${details.name}</h2><span class="modal-pokemon-number">#${String(details.id).padStart(3, '0')}</span></div><div class="modal-body"></div>`; modalContent.querySelector('.modal-body').innerHTML = `<img class="modal-pokemon-image" src="${details.sprites.other['official-artwork']?.front_default || details.sprites.front_default}" alt="${details.name}"><div class="modal-pokemon-info"><div class="modal-pokemon-types">${details.types.map(t => `<span class="type ${t.type.name}">${t.type.name}</span>`).join('')}</div><div class="pokemon-stats">${details.stats.map(s => `<div class="stat-row"><span class="stat-name">${s.stat.name.replace(/-/g, ' ')}</span><div class="stat-bar-container"><div class="stat-bar" style="width: ${Math.min(s.base_stat, 150)}px;">${s.base_stat}</div></div></div>`).join('')}</div></div>`; modalContainer.classList.add('visible'); modalContainer.querySelector('.modal-close-button').addEventListener('click', () => closeModal(modalContainer)); modalContainer.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) closeModal(modalContainer); }); }
-export function closeModal(modalContainer) { modalContainer.classList.remove('visible'); }
-export function showLoader(pokedexContainer) { pokedexContainer.innerHTML = ''; const skeletonCount = 12; for (let i = 0; i < skeletonCount; i++) { const card = document.createElement('div'); card.className = 'skeleton-card'; card.innerHTML = `<div class="skeleton skeleton-image"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text skeleton-text-small"></div>`; pokedexContainer.appendChild(card); } }
-export function displayError(message, pokedexContainer) { pokedexContainer.innerHTML = `<div class="error-message-inline">${message}</div>`; }
-export function updateHeaderTitle(gen) { document.querySelector('header h1').textContent = `Pokedex - ${GENERATIONS[gen]?.name || 'Todas'}`; }
-export function setupTheme(themeToggleButton) {
-    const applyTheme = (theme) => {
-        if (theme === 'dark') {
-            document.body.classList.add('dark-mode');
-            themeToggleButton.innerHTML = '🌙';
-        } else {
-            document.body.classList.remove('dark-mode');
-            themeToggleButton.innerHTML = '☀️';
+const TYPE_LABELS_PT = {
+    normal: 'Normal', fire: 'Fogo', water: 'Água', electric: 'Elétrico',
+    grass: 'Grama', ice: 'Gelo', fighting: 'Lutador', poison: 'Venenoso',
+    ground: 'Terra', flying: 'Voador', psychic: 'Psíquico', bug: 'Inseto',
+    rock: 'Pedra', ghost: 'Fantasma', dragon: 'Dragão', dark: 'Sombrio',
+    steel: 'Aço', fairy: 'Fada',
+};
+
+const STAT_LABELS_PT = {
+    hp: 'HP', attack: 'Ataque', defense: 'Defesa',
+    'special-attack': 'Ataque Esp.', 'special-defense': 'Defesa Esp.', speed: 'Velocidade',
+};
+
+const MAX_STAT_VALUE = 255;
+
+const PLACEHOLDER_IMAGE = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
+    + '<circle cx="50" cy="50" r="46" fill="none" stroke="#ccc" stroke-width="4"/>'
+    + '<line x1="4" y1="50" x2="96" y2="50" stroke="#ccc" stroke-width="4"/>'
+    + '<circle cx="50" cy="50" r="12" fill="#fff" stroke="#ccc" stroke-width="4"/>'
+    + '</svg>',
+);
+
+function translateType(type) {
+    return TYPE_LABELS_PT[type] || type;
+}
+
+function getPokemonImage(pokemon) {
+    return pokemon.sprites?.other?.['official-artwork']?.front_default
+        || pokemon.sprites?.front_default
+        || pokemon.image
+        || '';
+}
+
+function buildTypeBadges(types) {
+    return types
+        .map((type) => `<span class="type ${type}">${translateType(type)}</span>`)
+        .join('');
+}
+
+export function createPokemonCard(pokemon, onSelect) {
+    const card = document.createElement('div');
+    card.className = 'pokemon-card';
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', `Ver detalhes de ${pokemon.name}`);
+
+    if (onSelect) {
+        card.addEventListener('click', onSelect);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onSelect();
+            }
+        });
+    }
+
+    const img = document.createElement('img');
+    img.src = pokemon.image;
+    img.alt = pokemon.name;
+    img.loading = 'lazy';
+    img.onerror = () => { img.onerror = null; img.src = PLACEHOLDER_IMAGE; };
+
+    const number = document.createElement('div');
+    number.className = 'pokemon-number';
+    number.textContent = `#${String(pokemon.id).padStart(3, '0')}`;
+
+    const name = document.createElement('div');
+    name.className = 'pokemon-name';
+    name.textContent = pokemon.name;
+
+    const types = document.createElement('div');
+    types.className = 'pokemon-types';
+    types.innerHTML = buildTypeBadges(pokemon.types);
+
+    const generationBadge = document.createElement('div');
+    generationBadge.className = 'generation-badge';
+    generationBadge.textContent = GENERATIONS[getGenerationByID(pokemon.id)]?.name || 'Kanto';
+
+    card.append(img, number, name, types, generationBadge);
+    return card;
+}
+
+export function createDetailsModal(details, modalContainer) {
+    const primaryType = details.types[0].type.name;
+
+    const statsHtml = details.stats.map((s) => {
+        const label = STAT_LABELS_PT[s.stat.name] || s.stat.name.replace(/-/g, ' ');
+        const percentage = Math.min(Math.round((s.base_stat / MAX_STAT_VALUE) * 100), 100);
+        return `
+            <div class="stat-row">
+                <span class="stat-name">${label}</span>
+                <div class="stat-bar-container">
+                    <div class="stat-bar" style="width: ${percentage}%;"></div>
+                </div>
+                <span class="stat-value">${s.base_stat}</span>
+            </div>`;
+    }).join('');
+
+    const abilitiesHtml = details.abilities
+        .map((a) => a.ability.name.replace(/-/g, ' '))
+        .join(', ');
+
+    modalContainer.innerHTML = `
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-pokemon-name">
+            <div class="modal-content type-${primaryType}">
+                <button type="button" class="modal-close-button" aria-label="Fechar detalhes">&times;</button>
+                <div class="modal-header">
+                    <h2 class="modal-pokemon-name" id="modal-pokemon-name">${details.name}</h2>
+                    <span class="modal-pokemon-number">#${String(details.id).padStart(3, '0')}</span>
+                </div>
+                <div class="modal-body">
+                    <img class="modal-pokemon-image" src="${getPokemonImage(details)}" alt="${details.name}">
+                    <div class="modal-pokemon-info">
+                        <div class="modal-pokemon-types">${buildTypeBadges(details.types.map((t) => t.type.name))}</div>
+                        <div class="modal-pokemon-meta">
+                            <span><strong>Altura:</strong> ${(details.height / 10).toFixed(1)} m</span>
+                            <span><strong>Peso:</strong> ${(details.weight / 10).toFixed(1)} kg</span>
+                        </div>
+                        <div class="modal-pokemon-abilities"><strong>Habilidades:</strong> ${abilitiesHtml}</div>
+                        <div class="pokemon-stats">${statsHtml}</div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+
+    modalContainer.classList.add('visible');
+
+    const closeButton = modalContainer.querySelector('.modal-close-button');
+    closeButton.addEventListener('click', () => closeModal(modalContainer));
+    closeButton.focus();
+
+    modalContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) closeModal(modalContainer);
+    });
+
+    const escHandler = (e) => {
+        if (e.key === 'Escape') {
+            closeModal(modalContainer);
+            document.removeEventListener('keydown', escHandler);
         }
     };
+    document.addEventListener('keydown', escHandler);
+}
 
-    const savedTheme = localStorage.getItem('theme') || 'light';
+export function closeModal(modalContainer) {
+    modalContainer.classList.remove('visible');
+    modalContainer.innerHTML = '';
+}
+
+export function showLoader(pokedexContainer) {
+    pokedexContainer.setAttribute('aria-busy', 'true');
+    pokedexContainer.innerHTML = '';
+    const skeletonCount = 12;
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < skeletonCount; i += 1) {
+        const card = document.createElement('div');
+        card.className = 'skeleton-card';
+        card.innerHTML = `
+            <div class="skeleton skeleton-image"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text skeleton-text-small"></div>`;
+        fragment.appendChild(card);
+    }
+    pokedexContainer.appendChild(fragment);
+}
+
+export function displayError(message, pokedexContainer, onRetry) {
+    pokedexContainer.setAttribute('aria-busy', 'false');
+    pokedexContainer.innerHTML = '';
+    const errorBox = document.createElement('div');
+    errorBox.className = 'error-message-inline';
+    errorBox.setAttribute('role', 'alert');
+
+    const text = document.createElement('p');
+    text.textContent = message;
+    errorBox.appendChild(text);
+
+    if (onRetry) {
+        const retryButton = document.createElement('button');
+        retryButton.type = 'button';
+        retryButton.className = 'retry-button';
+        retryButton.textContent = 'Tentar novamente';
+        retryButton.addEventListener('click', onRetry);
+        errorBox.appendChild(retryButton);
+    }
+
+    pokedexContainer.appendChild(errorBox);
+}
+
+export function updateHeaderTitle(gen) {
+    document.querySelector('header h1').textContent = `Pokédex - ${GENERATIONS[gen]?.name || 'Todas as Gerações'}`;
+}
+
+export function setupTheme(themeToggleButton) {
+    const applyTheme = (theme) => {
+        document.body.classList.toggle('dark-mode', theme === 'dark');
+        themeToggleButton.textContent = theme === 'dark' ? '🌙' : '☀️';
+        themeToggleButton.setAttribute('aria-label', theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro');
+    };
+
+    const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
     applyTheme(savedTheme);
 
     themeToggleButton.addEventListener('click', () => {

@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokedex</title>
+    <title>Pokédex - 1ª Geração e além</title>
+    <meta name="description" content="Pokédex interativa com tema espacial: navegue, busque e filtre Pokémon de todas as gerações com dados em tempo real da PokeAPI.">
+    <meta name="theme-color" content="#090A0F">
+    <meta property="og:title" content="Pokédex">
+    <meta property="og:description" content="Explore os Pokémon de todas as gerações com busca, filtros e detalhes completos de estatísticas.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23fff' stroke='%23222' stroke-width='6'/%3E%3Cpath d='M4 50h92' stroke='%23222' stroke-width='6'/%3E%3Ccircle cx='50' cy='50' r='14' fill='%23fff' stroke='%23222' stroke-width='6'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,11 +23,12 @@
 
     <header>
         <h1>Pokedex</h1>
-        <div class="search-container">
-            <input type="text" id="search" placeholder="Buscar Pokémon...">
-            <i class="search-icon">🔍</i>
+        <div class="search-container" role="search">
+            <label for="search" class="visually-hidden">Buscar Pokémon por nome</label>
+            <input type="text" id="search" placeholder="Buscar Pokémon..." autocomplete="off">
+            <i class="search-icon" role="button" tabindex="0" aria-label="Buscar">🔍</i>
         </div>
-        <button id="theme-toggle" class="theme-toggle-button">🌙</button>
+        <button id="theme-toggle" class="theme-toggle-button" aria-label="Alternar tema claro/escuro">🌙</button>
     </header>
 
     <div class="filters-section">
@@ -31,7 +38,7 @@
                     <i class="filter-icon">🌿</i>
                     <span>Tipo</span>
                 </label>
-                <select id="type-filter" class="modern-select">
+                <select id="type-filter" class="modern-select" aria-label="Filtrar por tipo">
                     <option value="">Todos os Tipos</option> 
                     <option value="grass">Grama</option>
                     <option value="fire">Fogo</option>
@@ -59,7 +66,7 @@
                     <i class="filter-icon">🌟</i>
                     <span>Geração</span>
                 </label>
-                <select id="generation-filter" class="modern-select">
+                <select id="generation-filter" class="modern-select" aria-label="Filtrar por geração">
                     <option value="all">Todas as Gerações</option>
                     <option value="1">1ª Geração (Kanto)</option>
                     <option value="2">2ª Geração (Johto)</option>
@@ -76,13 +83,13 @@
     </div>
 
     <main>
-        <div class="pokedex-container" id="pokedex"></div>
+        <div class="pokedex-container" id="pokedex" aria-live="polite" aria-busy="false"></div>
         <div id="scroll-trigger" style="height: 50px;"></div>
-        <div id="modal-container"></div> 
+        <div id="modal-container"></div>
     </main>
 
     <footer>
-        <p>© 2023 Pokedex - Todos os direitos reservados</p>
+        <p>© <span id="current-year"></span> Pokédex - Todos os direitos reservados</p>
     </footer>
 
     <script type="module" src="js/main.js"></script>
