@@ -3,119 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon Não Encontrado | Pokedex</title>
+    <title>Sinal Perdido | Pokédex Unit-01</title>
+    <meta name="theme-color" content="#C6392C">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        .error-container {
+        .not-found {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 80vh;
             text-align: center;
-            padding: 2rem;
-            position: relative;
-            z-index: 2;
-            animation: fadeIn 0.5s ease;
+            gap: 1.1rem;
+            padding: clamp(2.5rem, 8vw, 5rem) 1.5rem;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .error-code {
-            font-size: 6rem;
+        .not-found__code {
+            font-family: var(--font-display);
+            font-size: clamp(3.5rem, 12vw, 6rem);
             font-weight: 700;
-            color: #e3350d;
-            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
-            margin-bottom: 1rem;
+            color: var(--danger);
+            letter-spacing: 0.05em;
         }
-
-        .error-message {
-            font-size: 1.8rem;
-            margin-bottom: 2rem;
-            color: white;
-            max-width: 600px;
+        .not-found__image {
+            width: 130px;
+            height: 130px;
+            filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25)) grayscale(0.6);
+            opacity: 0.85;
         }
-
-        .error-image {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 2rem;
-            filter: drop-shadow(0 0 8px rgba(227, 53, 13, 0.5));
+        .not-found__message {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            letter-spacing: 0.04em;
+            color: var(--text-primary);
+            max-width: 420px;
         }
-
+        .not-found__hint {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            max-width: 420px;
+        }
         .home-button {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #e3350d, #f5c842);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-top: 0.5rem;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            font-size: 0.85rem;
+            padding: 10px 26px;
+            border: 1px solid var(--phosphor);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--phosphor);
             text-decoration: none;
-            display: inline-block;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
-
-        .home-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(227, 53, 13, 0.6);
-        }
-
-        .pikachu-sad {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 100px;
-            opacity: 0.7;
-            z-index: 1;
-        }
-
-        @media (max-width: 768px) {
-            .error-code {
-                font-size: 4rem;
-            }
-            .error-message {
-                font-size: 1.4rem;
-            }
+        .home-button:hover,
+        .home-button:focus-visible {
+            background: var(--phosphor);
+            color: var(--screen-bg-raised);
+            outline: none;
         }
     </style>
 </head>
 <body>
-    <!-- Elementos de fundo -->
-    <div class="walppaper"></div>
-    <div class="galaxy"></div>
-    <div class="stars-layer"></div>
-    <div class="stars"></div>
-    <div class="stars2"></div>
-    <div class="stars3"></div>
+    <div class="device">
+        <header class="device__header">
+            <div class="device__brand">
+                <span class="device__led" aria-hidden="true" style="background: radial-gradient(circle at 35% 30%, #ffd9b0, var(--danger) 60%); box-shadow: 0 0 0 3px rgba(0,0,0,0.15) inset, 0 0 12px 2px var(--danger);"></span>
+                <div class="device__brand-text">
+                    <h1>Pokédex</h1>
+                    <p class="device__subtitle">Unit-01 · Erro 404</p>
+                </div>
+            </div>
+        </header>
 
-    <!-- Conteúdo da página 404 -->
-    <div class="error-container">
-        <div class="error-code">404</div>
-        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" 
-             alt="Pikachu triste" 
-             class="error-image">
-        <div class="error-message">Oops! O Pokémon que você está procurando fugiu!</div>
-        <p style="color: #ccc; margin-bottom: 2rem; max-width: 500px;">
-            A página que você tentou acessar não existe ou o Pokémon foi capturado por outro treinador!
-        </p>
-        <!-- BOTÃO CORRIGIDO AQUI -->
-        <a href="./" class="home-button">Voltar para a Pokedex</a>
+        <div class="device__screen">
+            <div class="not-found">
+                <div class="not-found__code">404</div>
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+                     alt="Pikachu, ícone do erro"
+                     class="not-found__image">
+                <p class="not-found__message">SINAL PERDIDO — o espécime que você procura não está nesta frequência.</p>
+                <p class="not-found__hint">A página não existe ou foi movida. Volte ao terminal principal e escaneie de novo.</p>
+                <a href="./" class="home-button">VOLTAR AO TERMINAL</a>
+            </div>
+        </div>
+
+        <footer class="device__footer">
+            <div class="device__vents" aria-hidden="true"></div>
+            <p>© <span id="current-year">2026</span> Pokédex Unit-01</p>
+        </footer>
     </div>
-
-    <!-- Pikachu animado -->
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/25.gif" 
-         alt="Pikachu triste" 
-         class="pikachu-sad">
-
-    <!-- Rodapé -->
-    <footer style="position: fixed; bottom: 0; width: 100%;">
-        <p>© <span id="current-year">2026</span> Pokedex - Todos os direitos reservados</p>
-    </footer>
 </body>
 </html>

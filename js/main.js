@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedType = typeFilter.value;
 
         if (selectedGen === 'all' && selectedType) {
-            displayError("Filtro por tipo não disponível com 'Todas as Gerações'.", pokedexContainer);
+            displayError("FILTRO INVÁLIDO — tipo não combina com 'Todas as Gerações'.", pokedexContainer);
             setAllPokemons([]);
             return;
         }
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderPokedex();
         } catch (error) {
             setLoading(false);
-            displayError(error.message || 'Não foi possível carregar os Pokémon.', pokedexContainer, handleFilterOrBrowse);
+            displayError(error.message || 'FALHA NA LEITURA — não foi possível carregar os Pokémon.', pokedexContainer, handleFilterOrBrowse);
         }
     }
 
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pokedexContainer.appendChild(card);
             pokedexContainer.setAttribute('aria-busy', 'false');
         } catch (error) {
-            displayError(error.message || `Pokémon "${name}" não encontrado.`, pokedexContainer, () => handleGlobalSearch(name));
+            displayError(error.message || `ESPÉCIME "${name}" NÃO ENCONTRADO.`, pokedexContainer, () => handleGlobalSearch(name));
         } finally {
             setLoading(false);
         }
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const pokemonsToLoad = getFilteredPokemons().slice(state.currentOffset, state.currentOffset + POKEMONS_PER_PAGE);
         if (pokemonsToLoad.length === 0) {
-            if (state.currentOffset === 0) displayError('Nenhum Pokémon encontrado com estes filtros.', pokedexContainer);
+            if (state.currentOffset === 0) displayError('SEM RESULTADOS — ajuste os filtros e escaneie de novo.', pokedexContainer);
             return;
         }
 
@@ -188,9 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (searchTerm.length >= MIN_GLOBAL_SEARCH_LENGTH) { handleGlobalSearch(searchTerm); }
         };
         searchIcon.addEventListener('click', triggerGlobalSearch);
-        searchIcon.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); triggerGlobalSearch(); }
-        });
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') { e.preventDefault(); triggerGlobalSearch(); }
         });

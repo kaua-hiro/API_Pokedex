@@ -9,35 +9,35 @@ async function fetchJson(url, notFoundMessage) {
     try {
         response = await fetch(url);
     } catch {
-        throw new Error('Sem conexão com a internet. Verifique sua rede e tente novamente.');
+        throw new Error('SINAL PERDIDO — verifique sua conexão e escaneie novamente.');
     }
     if (!response.ok) {
-        throw new Error(notFoundMessage || `Falha ao buscar dados (HTTP ${response.status}).`);
+        throw new Error(notFoundMessage || `FALHA NA LEITURA (HTTP ${response.status}).`);
     }
     return response.json();
 }
 
 export async function fetchPokemonDetails(url) {
-    return fetchJson(url, 'Não foi possível carregar os detalhes deste Pokémon.');
+    return fetchJson(url, 'FALHA AO LER OS DADOS deste espécime.');
 }
 
 export async function fetchAllPokemonsByGeneration(gen) {
     const { offset, limit } = GENERATIONS[gen];
     const url = `${API_BASE}/pokemon?limit=${limit}&offset=${offset}`;
-    const data = await fetchJson(url, 'Não foi possível carregar esta geração.');
+    const data = await fetchJson(url, 'FALHA AO CARREGAR esta geração.');
     return data.results.map((p) => ({ name: p.name, url: p.url }));
 }
 
 export async function fetchAllPokemons() {
     const url = `${API_BASE}/pokemon?limit=${TOTAL_POKEMON_COUNT}`;
-    const data = await fetchJson(url, 'Não foi possível carregar a lista de Pokémon.');
+    const data = await fetchJson(url, 'FALHA AO CARREGAR a base de dados.');
     return data.results.map((p) => ({ name: p.name, url: p.url }));
 }
 
 export async function fetchPokemonsByType(type, gen) {
     const { offset, limit } = GENERATIONS[gen];
     const url = `${API_BASE}/type/${type}`;
-    const data = await fetchJson(url, 'Não foi possível carregar este tipo de Pokémon.');
+    const data = await fetchJson(url, 'FALHA AO FILTRAR por esse tipo.');
 
     return data.pokemon
         .map((p) => {
@@ -51,17 +51,17 @@ export async function fetchPokemonsByType(type, gen) {
 export async function searchGlobalPokemon(name) {
     const speciesData = await fetchJson(
         `${API_BASE}/pokemon-species/${name.toLowerCase()}`,
-        `Pokémon "${name}" não encontrado.`,
+        `ESPÉCIME "${name}" NÃO ENCONTRADO.`,
     );
     const defaultVariety = speciesData.varieties.find((v) => v.is_default);
     if (!defaultVariety) {
-        throw new Error(`Pokémon "${name}" não encontrado.`);
+        throw new Error(`ESPÉCIME "${name}" NÃO ENCONTRADO.`);
     }
     return fetchPokemonDetails(defaultVariety.pokemon.url);
 }
 
 export async function fetchDetailsForModal(pokemonId) {
-    return fetchJson(`${API_BASE}/pokemon/${pokemonId}`, 'Pokémon não encontrado.');
+    return fetchJson(`${API_BASE}/pokemon/${pokemonId}`, 'ESPÉCIME NÃO ENCONTRADO.');
 }
 
 export function getGenerationByID(id) {

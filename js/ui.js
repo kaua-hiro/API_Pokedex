@@ -94,7 +94,7 @@ export function createDetailsModal(details, modalContainer) {
             <div class="stat-row">
                 <span class="stat-name">${label}</span>
                 <div class="stat-bar-container">
-                    <div class="stat-bar" style="width: ${percentage}%;"></div>
+                    <div class="stat-bar" data-fill="${percentage}" style="width: 0%;"></div>
                 </div>
                 <span class="stat-value">${s.base_stat}</span>
             </div>`;
@@ -128,6 +128,12 @@ export function createDetailsModal(details, modalContainer) {
         </div>`;
 
     modalContainer.classList.add('visible');
+
+    requestAnimationFrame(() => {
+        modalContainer.querySelectorAll('.stat-bar').forEach((bar) => {
+            bar.style.width = `${bar.dataset.fill}%`;
+        });
+    });
 
     const closeButton = modalContainer.querySelector('.modal-close-button');
     closeButton.addEventListener('click', () => closeModal(modalContainer));
@@ -183,7 +189,7 @@ export function displayError(message, pokedexContainer, onRetry) {
         const retryButton = document.createElement('button');
         retryButton.type = 'button';
         retryButton.className = 'retry-button';
-        retryButton.textContent = 'Tentar novamente';
+        retryButton.textContent = 'RE-SCAN';
         retryButton.addEventListener('click', onRetry);
         errorBox.appendChild(retryButton);
     }
@@ -192,14 +198,15 @@ export function displayError(message, pokedexContainer, onRetry) {
 }
 
 export function updateHeaderTitle(gen) {
-    document.querySelector('header h1').textContent = `Pokédex - ${GENERATIONS[gen]?.name || 'Todas as Gerações'}`;
+    const subtitle = document.getElementById('unit-subtitle');
+    if (subtitle) subtitle.textContent = `Unit-01 · ${GENERATIONS[gen]?.name || 'Todas as Gerações'}`;
 }
 
 export function setupTheme(themeToggleButton) {
     const applyTheme = (theme) => {
         document.body.classList.toggle('dark-mode', theme === 'dark');
-        themeToggleButton.textContent = theme === 'dark' ? '🌙' : '☀️';
-        themeToggleButton.setAttribute('aria-label', theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro');
+        themeToggleButton.setAttribute('aria-pressed', String(theme === 'dark'));
+        themeToggleButton.setAttribute('aria-label', theme === 'dark' ? 'Ativar carcaça clara' : 'Ativar carcaça escura');
     };
 
     const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
