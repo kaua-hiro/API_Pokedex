@@ -11,3 +11,17 @@ export const GENERATIONS = {
     8: { name: "Galar", limit: 96, offset: 809 },
     9: { name: "Paldea", limit: 110, offset: 905 }
 };
+
+/** One accent colour per region — echoes each generation's box-art
+ * palette, used as the keypad-style swatch in the GEN picker. */
+export const GENERATION_COLORS = {
+    1: "#EF5350",
+    2: "#D4A62A",
+    3: "#26A69A",
+    4: "#5C6BC0",
+    5: "#78909C",
+    6: "#AB47BC",
+    7: "#FF7043",
+    8: "#7E57C2",
+    9: "#EC407A",
+};

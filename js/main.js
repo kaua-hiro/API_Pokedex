@@ -17,7 +17,8 @@ import {
     updateHeaderTitle,
     setupTheme,
 } from './ui.js';
-import { POKEMONS_PER_PAGE } from './constants.js';
+import { POKEMONS_PER_PAGE, GENERATION_COLORS } from './constants.js';
+import { createPokedexSelect } from './pokedexSelect.js';
 import {
     state,
     setAllPokemons,
@@ -41,6 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchIcon = document.querySelector('.search-icon');
     const scrollTrigger = document.getElementById('scroll-trigger');
     const themeToggleButton = document.getElementById('theme-toggle');
+
+    const generationSelect = createPokedexSelect(generationFilter, {
+        renderSwatch: (value) => value === 'all'
+            ? ''
+            : `<span class="pokedex-select__swatch" style="--swatch:${GENERATION_COLORS[value] || 'var(--phosphor)'}"></span>`,
+    });
+    const typeSelect = createPokedexSelect(typeFilter, {
+        renderSwatch: (value) => value ? `<span class="pokedex-select__swatch ${value}"></span>` : '',
+    });
 
     function mapToCardData(details) {
         return {
@@ -206,6 +216,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btnClear?.addEventListener('click', () => {
             generationFilter.value = 'all';
             typeFilter.value = '';
+            generationSelect.sync();
+            typeSelect.sync();
             updateHeaderTitle('all');
             resetAndBrowse();
         });
@@ -214,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (yearEl) yearEl.textContent = new Date().getFullYear();
 
         generationFilter.value = 'all';
+        generationSelect.sync();
         updateHeaderTitle(generationFilter.value);
         handleFilterOrBrowse();
         observer.observe(scrollTrigger);
