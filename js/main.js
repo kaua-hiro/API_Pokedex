@@ -192,6 +192,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Enter') { e.preventDefault(); triggerGlobalSearch(); }
         });
 
+        const btnSearch = document.getElementById('btn-search');
+        const btnClear = document.getElementById('btn-clear');
+        btnSearch?.addEventListener('click', triggerGlobalSearch);
+        btnClear?.addEventListener('click', () => {
+            generationFilter.value = 'all';
+            typeFilter.value = '';
+            updateHeaderTitle('all');
+            resetAndBrowse();
+        });
+
         const yearEl = document.getElementById('current-year');
         if (yearEl) yearEl.textContent = new Date().getFullYear();
 

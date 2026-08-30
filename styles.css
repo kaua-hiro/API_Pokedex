@@ -142,7 +142,8 @@ body::before {
     gap: 14px;
 }
 
-/* The lens — the single most recognizable feature of the real device */
+/* The lens — canonically a blue spherical camera lens on the anime's
+   Kanto Pokédex ("Dexter"), upper-left of the case. */
 .device__lens {
     flex-shrink: 0;
     display: flex;
@@ -151,19 +152,20 @@ body::before {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.55), rgba(0, 0, 0, 0.2) 75%);
+    background: radial-gradient(circle at 32% 26%, #cfe6ff 0%, #4f8fe0 32%, #1a4fa0 72%, #0b2e66 100%);
     box-shadow:
         inset 0 2px 4px rgba(0, 0, 0, 0.35),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.2),
-        0 1px 0 rgba(255, 255, 255, 0.3);
+        inset 0 -2px 3px rgba(255, 255, 255, 0.15),
+        0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 0 3px rgba(0, 0, 0, 0.15);
 }
 
 .device__led {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #baf5e2, var(--phosphor) 60%, var(--phosphor) 100%);
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15) inset, 0 0 12px 2px var(--phosphor);
+    background: radial-gradient(circle at 35% 30%, #f2fffb, var(--phosphor) 55%, var(--phosphor) 100%);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25) inset, 0 0 10px 2px var(--phosphor);
     animation: pulse 2.4s ease-in-out infinite;
 }
 
@@ -172,8 +174,8 @@ body::before {
     50% { opacity: 0.55; }
 }
 
-/* The three status dots next to the lens, a signature detail of the
-   real hardware's top plate. */
+/* The three status lights next to the lens — canonically red, yellow
+   and green, stacked top to bottom on the real hardware's top plate. */
 .device__indicators {
     display: flex;
     flex-direction: column;
@@ -188,9 +190,41 @@ body::before {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 
-.dot--blue { background: #3fa9f5; }
+.dot--red { background: #ff4d3d; }
 .dot--yellow { background: #ffd23f; }
-.dot--red { background: #ff5449; }
+.dot--green { background: #4fd66b; }
+
+/* ---------- Hinge (the clamshell fold between the top plate and the
+   Game-Boy-style screen half) ---------- */
+
+.device__hinge {
+    position: relative;
+    height: 10px;
+    margin: 2px 22px 6px;
+}
+
+.device__hinge::before {
+    content: '';
+    position: absolute;
+    inset: auto 0 3px 0;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.18);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.device__knuckle {
+    position: absolute;
+    top: -1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--shell-deep);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.device__knuckle:first-of-type { left: 14%; }
+.device__knuckle:last-of-type { right: 14%; }
 
 .device__brand-text h1 {
     margin: 0;
@@ -356,6 +390,105 @@ body.dark-mode .device__switch-thumb {
     color: var(--phosphor);
     background: var(--phosphor-dim);
     outline: none;
+}
+
+/* ---------- Console (D-pad + A/B buttons) ----------
+   The left half of the real Kanto Pokédex is a Game Boy: a black
+   D-pad and colored round buttons below the screen. Here the green
+   button confirms a search and the red one clears search + filters —
+   literal hardware references doing real work, not just decoration. */
+
+.console {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--screen-border);
+}
+
+.dpad {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+}
+
+.dpad__arm {
+    position: absolute;
+    background: #1a1a1a;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.dpad__arm--up, .dpad__arm--down {
+    left: 16px;
+    width: 14px;
+    height: 18px;
+}
+
+.dpad__arm--up { top: 0; border-radius: 3px 3px 0 0; }
+.dpad__arm--down { bottom: 0; border-radius: 0 0 3px 3px; }
+
+.dpad__arm--left, .dpad__arm--right {
+    top: 16px;
+    width: 18px;
+    height: 14px;
+}
+
+.dpad__arm--left { left: 0; border-radius: 3px 0 0 3px; }
+.dpad__arm--right { right: 0; border-radius: 0 3px 3px 0; }
+
+.dpad__center {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 14px;
+    height: 14px;
+    background: #1a1a1a;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.08);
+}
+
+.console__buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.hw-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        inset 0 2px 2px rgba(255, 255, 255, 0.35),
+        inset 0 -3px 4px rgba(0, 0, 0, 0.35),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s ease;
+}
+
+.hw-button:active { transform: translateY(1px); }
+
+.hw-button--green { background: radial-gradient(circle at 35% 30%, #7fe08a, #2f9e46 70%); }
+.hw-button--red { background: radial-gradient(circle at 35% 30%, #ff9a8f, #d43a2c 70%); }
+
+.hw-button__label {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.7rem;
+    color: rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.hw-button:focus-visible {
+    outline: 2px solid var(--phosphor);
+    outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+    .dpad { display: none; }
 }
 
 /* ---------- Control strip (filters) ---------- */

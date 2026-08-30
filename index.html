@@ -23,9 +23,9 @@
                     <span class="device__led"></span>
                 </span>
                 <span class="device__indicators" aria-hidden="true">
-                    <span class="dot dot--blue"></span>
-                    <span class="dot dot--yellow"></span>
                     <span class="dot dot--red"></span>
+                    <span class="dot dot--yellow"></span>
+                    <span class="dot dot--green"></span>
                 </span>
                 <div class="device__brand-text">
                     <h1>Pokédex</h1>
@@ -41,6 +41,11 @@
             </button>
         </header>
 
+        <div class="device__hinge" aria-hidden="true">
+            <span class="device__knuckle"></span>
+            <span class="device__knuckle"></span>
+        </div>
+
         <div class="device__screen">
             <div class="terminal-bar" role="search">
                 <label for="search" class="visually-hidden">Buscar Pokémon por nome</label>
@@ -50,6 +55,24 @@
                 <button type="button" class="search-icon" aria-label="Buscar">
                     <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><line x1="15.5" y1="15.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                 </button>
+            </div>
+
+            <div class="console">
+                <div class="dpad" aria-hidden="true">
+                    <span class="dpad__arm dpad__arm--up"></span>
+                    <span class="dpad__arm dpad__arm--right"></span>
+                    <span class="dpad__arm dpad__arm--down"></span>
+                    <span class="dpad__arm dpad__arm--left"></span>
+                    <span class="dpad__center"></span>
+                </div>
+                <div class="console__buttons">
+                    <button type="button" id="btn-search" class="hw-button hw-button--green" aria-label="Buscar">
+                        <span class="hw-button__label">A</span>
+                    </button>
+                    <button type="button" id="btn-clear" class="hw-button hw-button--red" aria-label="Limpar busca e filtros">
+                        <span class="hw-button__label">B</span>
+                    </button>
+                </div>
             </div>
 
             <div class="control-strip">
