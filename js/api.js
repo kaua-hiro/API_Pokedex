@@ -64,6 +64,36 @@ export async function fetchDetailsForModal(pokemonId) {
     return fetchJson(`${API_BASE}/pokemon/${pokemonId}`, 'ESPÉCIME NÃO ENCONTRADO.');
 }
 
+export async function fetchPokemonSpecies(pokemonId) {
+    return fetchJson(`${API_BASE}/pokemon-species/${pokemonId}`, 'DESCRIÇÃO NÃO ENCONTRADA.');
+}
+
+/** PokeAPI has no Portuguese flavor text at all — only en/fr/de/es/it/ja/ko/zh. */
+export function getEnglishFlavorText(speciesData) {
+    const entry = speciesData.flavor_text_entries.find((e) => e.language.name === 'en');
+    if (!entry) return '';
+    return entry.flavor_text.replace(/[\n\f\r]+/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+const TRANSLATE_ENDPOINT = 'https://api.mymemory.translated.net/get';
+
+/** Best-effort machine translation via a free public API. Never throws —
+ * callers get null on failure and fall back to English-only. */
+export async function translateToPortuguese(text) {
+    if (!text) return null;
+    const url = `${TRANSLATE_ENDPOINT}?q=${encodeURIComponent(text)}&langpair=en|pt-BR`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) return null;
+        const data = await response.json();
+        const translated = data?.responseData?.translatedText;
+        const looksLikeApiError = !translated || /QUERY LENGTH LIMIT|INVALID|MYMEMORY WARNING/i.test(translated);
+        return looksLikeApiError ? null : translated;
+    } catch {
+        return null;
+    }
+}
+
 export function getGenerationByID(id) {
     for (const gen in GENERATIONS) {
         const { offset, limit } = GENERATIONS[gen];

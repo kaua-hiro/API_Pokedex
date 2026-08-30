@@ -82,15 +82,19 @@ body {
 
 /* Faint scanner/radar dot-grid behind the device — reads as a lab
    backdrop the specimen is being scanned in front of, not decoration. */
+/* A hand-drawn pixel "tall grass" tile — the classic Game Boy overworld
+   texture, redrawn from scratch (not lifted from the real game's
+   tileset) as a nod to the original 8-bit games behind the device. */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background-image: radial-gradient(var(--shell-ink) 1px, transparent 1px);
-    background-size: 26px 26px;
-    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='6' y='9' width='1' height='3' fill='%232f6b39'/%3E%3Crect x='7' y='6' width='1' height='6' fill='%232f6b39'/%3E%3Crect x='8' y='9' width='1' height='3' fill='%232f6b39'/%3E%3Crect x='7' y='6' width='1' height='1' fill='%236fbf6f'/%3E%3C/svg%3E");
+    background-size: 32px 32px;
+    image-rendering: pixelated;
+    opacity: 0.12;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -935,9 +939,44 @@ main { margin-top: 16px; }
     gap: 0.5rem;
 }
 
+/* The scan viewport — a small embedded screen showing the specimen,
+   the same beat as the anime pointing the Pokédex at a Pokémon. */
+.modal-scanner {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    border-radius: 10px;
+    background: var(--screen-bg);
+    border: 2px solid var(--screen-border);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+}
+
+.modal-scanner__sweep {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -20%;
+    height: 45%;
+    background: linear-gradient(180deg, transparent, var(--phosphor-dim) 45%, var(--phosphor) 50%, var(--phosphor-dim) 55%, transparent);
+    opacity: 0.9;
+    animation: scan-sweep 0.9s ease-out 1;
+}
+
+@keyframes scan-sweep {
+    from { top: -45%; }
+    to { top: 110%; }
+}
+
 .modal-pokemon-image {
-    width: 150px;
-    height: 150px;
+    position: relative;
+    z-index: 1;
+    width: 130px;
+    height: 130px;
     filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
 }
 
@@ -977,6 +1016,44 @@ main { margin-top: 16px; }
 }
 
 .modal-pokemon-abilities strong { color: var(--text-primary); }
+
+/* Bilingual Pokédex entry — PokeAPI only has the official English
+   text, so the Portuguese line is machine-translated on the fly. */
+.modal-pokemon-description {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 1.3rem;
+}
+
+.dex-entry {
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--screen-bg);
+    border: 1px solid var(--screen-border);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+.dex-entry__tag {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    background: var(--phosphor);
+    color: var(--screen-bg);
+    vertical-align: 1px;
+}
+
+.dex-entry--pt .dex-entry__tag { background: var(--warn); }
 
 .pokemon-stats {
     display: flex;

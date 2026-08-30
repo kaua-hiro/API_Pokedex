@@ -41,6 +41,15 @@ function buildTypeBadges(types) {
         .join('');
 }
 
+/** Escapes text pulled from third-party services (translation API) before
+ * it goes into innerHTML — unlike PokeAPI's own fields, that response
+ * isn't a source we control. */
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
 export function createPokemonCard(pokemon, onSelect) {
     const card = document.createElement('div');
     card.className = 'pokemon-card';
@@ -84,8 +93,9 @@ export function createPokemonCard(pokemon, onSelect) {
     return card;
 }
 
-export function createDetailsModal(details, modalContainer) {
+export function createDetailsModal(details, modalContainer, description = {}) {
     const primaryType = details.types[0].type.name;
+    const { descriptionEn = '', descriptionPt = null } = description;
 
     const statsHtml = details.stats.map((s) => {
         const label = STAT_LABELS_PT[s.stat.name] || s.stat.name.replace(/-/g, ' ');
@@ -104,6 +114,12 @@ export function createDetailsModal(details, modalContainer) {
         .map((a) => a.ability.name.replace(/-/g, ' '))
         .join(', ');
 
+    const descriptionHtml = descriptionEn ? `
+        <div class="modal-pokemon-description">
+            <p class="dex-entry dex-entry--en"><span class="dex-entry__tag">EN</span>${escapeHtml(descriptionEn)}</p>
+            <p class="dex-entry dex-entry--pt"><span class="dex-entry__tag">PT</span>${descriptionPt ? escapeHtml(descriptionPt) : 'Tradução indisponível no momento.'}</p>
+        </div>` : '';
+
     modalContainer.innerHTML = `
         <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-pokemon-name">
             <div class="modal-content type-${primaryType}">
@@ -113,7 +129,10 @@ export function createDetailsModal(details, modalContainer) {
                     <span class="modal-pokemon-number">#${String(details.id).padStart(3, '0')}</span>
                 </div>
                 <div class="modal-body">
-                    <img class="modal-pokemon-image" src="${getPokemonImage(details)}" alt="${details.name}">
+                    <div class="modal-scanner">
+                        <span class="modal-scanner__sweep" aria-hidden="true"></span>
+                        <img class="modal-pokemon-image" src="${getPokemonImage(details)}" alt="${details.name}">
+                    </div>
                     <div class="modal-pokemon-info">
                         <div class="modal-pokemon-types">${buildTypeBadges(details.types.map((t) => t.type.name))}</div>
                         <div class="modal-pokemon-meta">
@@ -121,6 +140,7 @@ export function createDetailsModal(details, modalContainer) {
                             <span><strong>Peso:</strong> ${(details.weight / 10).toFixed(1)} kg</span>
                         </div>
                         <div class="modal-pokemon-abilities"><strong>Habilidades:</strong> ${abilitiesHtml}</div>
+                        ${descriptionHtml}
                         <div class="pokemon-stats">${statsHtml}</div>
                     </div>
                 </div>

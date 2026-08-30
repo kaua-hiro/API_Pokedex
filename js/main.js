@@ -5,6 +5,9 @@ import {
     searchGlobalPokemon,
     fetchDetailsForModal,
     fetchPokemonDetails,
+    fetchPokemonSpecies,
+    getEnglishFlavorText,
+    translateToPortuguese,
 } from './api.js';
 import {
     createPokemonCard,
@@ -150,8 +153,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function showPokemonDetails(pokemonId) {
         try {
-            const details = await fetchDetailsForModal(pokemonId);
-            createDetailsModal(details, modalContainer);
+            const [details, species] = await Promise.all([
+                fetchDetailsForModal(pokemonId),
+                fetchPokemonSpecies(pokemonId).catch(() => null),
+            ]);
+            const descriptionEn = species ? getEnglishFlavorText(species) : '';
+            const descriptionPt = await translateToPortuguese(descriptionEn);
+            createDetailsModal(details, modalContainer, { descriptionEn, descriptionPt });
         } catch (error) {
             console.error('Erro ao buscar detalhes do Pokémon:', error);
         }
