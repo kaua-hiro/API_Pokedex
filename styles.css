@@ -333,7 +333,7 @@ body.dark-mode .device__switch-thumb {
     appearance: none;
     -webkit-appearance: none;
     border: none;
-    background: transparent;
+    background-color: transparent;
     color: var(--text-primary);
     font-family: var(--font-body);
     font-weight: 600;
@@ -344,14 +344,20 @@ body.dark-mode .device__switch-thumb {
     background-position: calc(100% - 14px) center, calc(100% - 9px) center;
     background-size: 5px 5px, 5px 5px;
     background-repeat: no-repeat;
-    color: var(--text-primary);
-    opacity: 0.9;
 }
 
 .modern-select:focus-visible {
     outline: 2px solid var(--phosphor);
     outline-offset: 2px;
     border-radius: 6px;
+}
+
+/* The dropdown popup is drawn by the OS/browser with its own default
+   background — pin both colors on the options so text stays legible
+   in dark mode instead of inheriting light text onto a white popup. */
+.modern-select option {
+    color: var(--text-primary);
+    background-color: var(--screen-bg-raised);
 }
 
 .control-strip__status {
